@@ -10,7 +10,7 @@ all: tigers-whip-client
 %.o: %.c
 	$(CC) $(ASAN) $(STUFF) -fPIC $(GDB) -c $< -o $@ $(OPTS)
 
-whip-client: $(OBJS)
+tigers-whip-client: $(OBJS)
 	$(CC) $(GDB) -o tigers-whip-client $(OBJS) $(ASAN_LIBS) $(STUFF_LIBS)
 
 clean:
