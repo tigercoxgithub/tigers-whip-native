@@ -1,6 +1,10 @@
 #!/bin/sh
 # Install dependecies
 sudo apt update &&\
+sudo apt install -y gdb &&\
+sudo apt install -y build-essential &&\
+sudo apt install -y devscripts &&\
+sudo apt install -y libc6-dev &&\
 sudo apt install -y pkg-config &&\
 sudo apt install -y libx264-dev &&\
 sudo apt install -y libgstreamer1.0-dev &&\
