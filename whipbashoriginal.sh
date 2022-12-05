@@ -2,7 +2,7 @@
 
 
 # Run command
-./whip-client -u https://customer-rtqpr9o38lod7dc9.cloudflarestream.com/3fba8dd8b1dea0be12e40c7dfd050565kf21252bba854bd6f054870e1a5a4c864/webRTC/publish -f true -l 7 \
+./tigers-whip-client -u https://customer-rtqpr9o38lod7dc9.cloudflarestream.com/3fba8dd8b1dea0be12e40c7dfd050565kf21252bba854bd6f054870e1a5a4c864/webRTC/publish -f true -l 7 \
 -A "audiotestsrc is-live=true wave=red-noise \
 ! audioconvert \
 ! audioresample \
