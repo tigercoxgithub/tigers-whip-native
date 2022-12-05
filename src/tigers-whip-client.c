@@ -466,7 +466,7 @@ static void whip_negotiation_needed(GstElement *element, gpointer user_data) {
 		return;
 	}
 
-// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
+/*// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
 	 WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
 	GArray* transceivers;
 	GstWebRTCRTPTransceiver* transceiverzero;
@@ -476,7 +476,7 @@ static void whip_negotiation_needed(GstElement *element, gpointer user_data) {
 	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
 	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
 	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-
+*/
 
 	WHIP_PREFIX(LOG_INFO, "Creating offer\n");
 	state = WHIP_STATE_OFFER_PREPARED;
