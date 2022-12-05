@@ -413,20 +413,6 @@ static gboolean whip_initialize(void) {
 		}
 	}
 
-
-// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
-/*	WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
-   
-	GArray* transceivers;
-	GstWebRTCRTPTransceiver* transceiverzero;
-	GstWebRTCRTPTransceiver* transceiverone;
-	g_signal_emit_by_name(pc, "get-transceivers", &transceivers);
-	transceiverzero = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 0);
-	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
-	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-*/
-
 	/* Let's configure the function to be invoked when an SDP offer can be prepared */
 	g_signal_connect(pc, "on-negotiation-needed", G_CALLBACK(whip_negotiation_needed), NULL);
 	/* We need a different callback to be notified about candidates to trickle to Janus */
@@ -442,9 +428,6 @@ static gboolean whip_initialize(void) {
 	GstElement *rtpbin = gst_bin_get_by_name(GST_BIN(pc), "rtpbin");
 	if(latency >= 0)
 		g_object_set(rtpbin, "latency", latency, "buffer-mode", 0, NULL);
-	//tiger added below 
-	g_object_set(rtpbin, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-	
 	guint rtp_latency = 0;
 	g_object_get(rtpbin, "latency", &rtp_latency, NULL);
 	WHIP_PREFIX(LOG_INFO, "Configured jitter-buffer size (latency) for PeerConnection to %ums\n", rtp_latency);
@@ -452,6 +435,20 @@ static gboolean whip_initialize(void) {
 
 	/* Start the pipeline */
 	gst_element_set_state(pipeline, GST_STATE_READY);
+
+	// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
+	WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
+	GArray* transceivers;
+	GstWebRTCRTPTransceiver* transceiverzero;
+	GstWebRTCRTPTransceiver* transceiverone;
+	g_signal_emit_by_name(pc, "get-transceivers", &transceivers);
+	transceiverzero = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 0);
+	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
+	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+
+
+
 
 	WHIP_PREFIX(LOG_INFO, "Starting the GStreamer pipeline\n");
 	GstStateChangeReturn ret = gst_element_set_state(GST_ELEMENT(pipeline), GST_STATE_PLAYING);
