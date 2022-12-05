@@ -415,7 +415,7 @@ static gboolean whip_initialize(void) {
 
 
 // tigers ADDED - RTP_TRANSCEIVER_DIRECTION
-	WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
+/*	WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
    
 	GArray* transceivers;
 	GstWebRTCRTPTransceiver* transceiverzero;
@@ -425,7 +425,7 @@ static gboolean whip_initialize(void) {
 	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
 	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
 	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-
+*/
 
 	/* Let's configure the function to be invoked when an SDP offer can be prepared */
 	g_signal_connect(pc, "on-negotiation-needed", G_CALLBACK(whip_negotiation_needed), NULL);
@@ -442,6 +442,8 @@ static gboolean whip_initialize(void) {
 	GstElement *rtpbin = gst_bin_get_by_name(GST_BIN(pc), "rtpbin");
 	if(latency >= 0)
 		g_object_set(rtpbin, "latency", latency, "buffer-mode", 0, NULL);
+		//tiger added below - remember to set a latency for this to take effect!
+		g_object_set(rtpbin, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
 	guint rtp_latency = 0;
 	g_object_get(rtpbin, "latency", &rtp_latency, NULL);
 	WHIP_PREFIX(LOG_INFO, "Configured jitter-buffer size (latency) for PeerConnection to %ums\n", rtp_latency);
