@@ -372,7 +372,8 @@ static gboolean whip_initialize(void) {
 	video[0] = '\0';
 	if(video_pipe != NULL)
 		g_snprintf(video, sizeof(video), "%s ! sendonly.", video_pipe);
-	g_snprintf(gst_pipeline, sizeof(gst_pipeline), "webrtcbin name=sendonly bundle-policy=%d %s %s %s %s %s",
+		//tiger added direction=sendonly below
+	g_snprintf(gst_pipeline, sizeof(gst_pipeline), "webrtcbin name=sendonly direction=sendonly bundle-policy=%d %s %s %s %s %s",
 		(audio_pipe && video_pipe ? 3 : 0),
 		(force_turn ? "ice-transport-policy=relay" : ""),
 		stun, turn, video, audio);
@@ -437,7 +438,7 @@ static gboolean whip_initialize(void) {
 	gst_element_set_state(pipeline, GST_STATE_READY);
 
 	// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
-	WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
+	/* WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
 	GArray* transceivers;
 	GstWebRTCRTPTransceiver* transceiverzero;
 	GstWebRTCRTPTransceiver* transceiverone;
@@ -446,7 +447,7 @@ static gboolean whip_initialize(void) {
 	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
 	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
 	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-
+*/
 
 
 
