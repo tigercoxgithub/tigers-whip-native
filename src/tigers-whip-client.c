@@ -442,8 +442,9 @@ static gboolean whip_initialize(void) {
 	GstElement *rtpbin = gst_bin_get_by_name(GST_BIN(pc), "rtpbin");
 	if(latency >= 0)
 		g_object_set(rtpbin, "latency", latency, "buffer-mode", 0, NULL);
-		//tiger added below - remember to set a latency for this to take effect!
-		g_object_set(rtpbin, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+	//tiger added below 
+	g_object_set(rtpbin, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+	
 	guint rtp_latency = 0;
 	g_object_get(rtpbin, "latency", &rtp_latency, NULL);
 	WHIP_PREFIX(LOG_INFO, "Configured jitter-buffer size (latency) for PeerConnection to %ums\n", rtp_latency);
