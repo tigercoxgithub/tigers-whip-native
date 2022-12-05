@@ -372,8 +372,8 @@ static gboolean whip_initialize(void) {
 	video[0] = '\0';
 	if(video_pipe != NULL)
 		g_snprintf(video, sizeof(video), "%s ! sendonly.", video_pipe);
-		//tiger added direction=sendonly below
-	g_snprintf(gst_pipeline, sizeof(gst_pipeline), "webrtcbin name=sendonly direction=sendonly bundle-policy=%d %s %s %s %s %s",
+		//tiger added direction=sendonly below (removed becuase it didnt work. Its got to be applied at the a= level eg sdp offer)
+	g_snprintf(gst_pipeline, sizeof(gst_pipeline), "webrtcbin name=sendonly bundle-policy=%d %s %s %s %s %s",
 		(audio_pipe && video_pipe ? 3 : 0),
 		(force_turn ? "ice-transport-policy=relay" : ""),
 		stun, turn, video, audio);
@@ -437,18 +437,6 @@ static gboolean whip_initialize(void) {
 	/* Start the pipeline */
 	gst_element_set_state(pipeline, GST_STATE_READY);
 
-	// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
-	/* WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
-	GArray* transceivers;
-	GstWebRTCRTPTransceiver* transceiverzero;
-	GstWebRTCRTPTransceiver* transceiverone;
-	g_signal_emit_by_name(pc, "get-transceivers", &transceivers);
-	transceiverzero = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 0);
-	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
-	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
-*/
-
 
 
 	WHIP_PREFIX(LOG_INFO, "Starting the GStreamer pipeline\n");
@@ -477,6 +465,19 @@ static void whip_negotiation_needed(GstElement *element, gpointer user_data) {
 		WHIP_LOG(LOG_WARN, "GStreamer trying to create a new offer, but we don't support renegotiations yet...\n");
 		return;
 	}
+
+// tigers ADDED - RTP_TRANSCEIVER_DIRECTION
+	 WHIP_PREFIX(LOG_INFO, "Tiger changing rtp direction to sendonly\n");
+	GArray* transceivers;
+	GstWebRTCRTPTransceiver* transceiverzero;
+	GstWebRTCRTPTransceiver* transceiverone;
+	g_signal_emit_by_name(pc, "get-transceivers", &transceivers);
+	transceiverzero = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 0);
+	transceiverone = g_array_index(transceivers, GstWebRTCRTPTransceiver*, 1);
+	g_object_set(transceiverzero, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+	g_object_set(transceiverone, "direction", GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY, NULL);
+
+
 	WHIP_PREFIX(LOG_INFO, "Creating offer\n");
 	state = WHIP_STATE_OFFER_PREPARED;
 	GstPromise *promise = gst_promise_new_with_change_func(whip_offer_available, user_data, NULL);
