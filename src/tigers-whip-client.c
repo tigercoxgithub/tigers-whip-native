@@ -683,7 +683,6 @@ static void whip_dtls_connection_state(GstElement *dtls, GParamSpec *pspec,
 			break;
 		case 4:
 			WHIP_PREFIX(LOG_INFO, "DTLS connected\n");
-			/**Tiger added here would be the place to add a DataChannel which client could connect to?*/
 			break;
 		default:
 			/* We don't care (we should in case of restarts?) */
